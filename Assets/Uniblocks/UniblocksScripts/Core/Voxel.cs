@@ -71,6 +71,29 @@ public class Voxel : MonoBehaviour {
 }
 
 		public static void PlaceBlock ( VoxelInfo voxelInfo, ushort data) {
+            switch (data)
+            {
+                case 17:
+                case 18:
+                case 21:
+                case 22:
+                case 23:
+                    return;
+                case 19:
+                    PlayerData.Instance.EditorEnt(PlayerData.Instance.Ent + 5);
+                    AllCompose.Instance.Compos(BagData.Instance.Selectindex, BagData.Instance.IdList[BagData.Instance.Selectindex],
+                        BagData.Instance.BagCuts[BagData.Instance.Selectindex], 1, true);
+                    AllCompose.Instance.UpdateBagCutAndToolbarCut();
+
+                    return;
+                case 20:
+                    EventDispatcher.TriggerEvent(E_MessageType.Cure, 5);
+                    AllCompose.Instance.Compos(BagData.Instance.Selectindex, BagData.Instance.IdList[BagData.Instance.Selectindex],
+                        BagData.Instance.BagCuts[BagData.Instance.Selectindex], 1, true);
+                    AllCompose.Instance.UpdateBagCutAndToolbarCut();
+                    return;
+
+            }
 		// multiplayer - send change to server
 		if (Engine.EnableMultiplayer) {
 			Engine.UniblocksNetwork.GetComponent<UniblocksClient>().SendPlaceBlock ( voxelInfo, data );
@@ -86,6 +109,9 @@ public class Voxel : MonoBehaviour {
 			}
 			Destroy (voxelObject);
 		}
+
+        
+
         AllCompose.Instance.Compos(BagData.Instance.Selectindex, BagData.Instance.IdList[BagData.Instance.Selectindex],
             BagData.Instance.BagCuts[BagData.Instance.Selectindex], 1, true);
 		AllCompose.Instance.UpdateBagCutAndToolbarCut();

@@ -19,6 +19,8 @@ public class GameConsoleUI : BaseUI
     {
         base.InitUiOnAwake();
         input_GetBlock = GameTool.GetTheChildComponent<InputField>(gameObject, "Input_GetBlock");
+        input_GetBlock.ActivateInputField();
+
         btn_Submit= GameTool.GetTheChildComponent<Button>(gameObject, "Btn_Submit");
         btn_Submit.onClick.AddListener(GetBlock);
         btn_Close = GameTool.GetTheChildComponent<Button>(gameObject, "Btn_Close");

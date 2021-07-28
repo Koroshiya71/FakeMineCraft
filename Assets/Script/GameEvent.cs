@@ -65,24 +65,7 @@ public class GameEvent : UnitySingleton<GameEvent>
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.KeypadEnter))
-        {
-            switch (BagData.Instance.IdList[BagData.Instance.Selectindex])
-            {
-                case 19:
-                    PlayerData.Instance.EditorEnt(PlayerData.Instance.Ent + 5);
-                    AllCompose.Instance.Compos(BagData.Instance.Selectindex, BagData.Instance.IdList[BagData.Instance.Selectindex],
-                        BagData.Instance.BagCuts[BagData.Instance.Selectindex], 1, true);
-                    break;
-                case 20:
-                    PlayerData.Instance.EditorHp(PlayerData.Instance.HP + 5);
-                    AllCompose.Instance.Compos(BagData.Instance.Selectindex, BagData.Instance.IdList[BagData.Instance.Selectindex],
-                        BagData.Instance.BagCuts[BagData.Instance.Selectindex], 1, true);
-                    break;
-                default:
-                    break;
-            }
-        }
+
     }
 
     private void OnGUI()

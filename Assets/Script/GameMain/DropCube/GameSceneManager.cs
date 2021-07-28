@@ -18,9 +18,9 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
     private Animator swordAnimator;
     private Animator axeAnimator;
 
-    public bool hasTorch;
-    public bool hasSword;
-    public bool hasAxe;
+    public bool hasTorch=false;
+    public bool hasSword = false;
+    public bool hasAxe = false;
 
     private bool useTorch;
     public E_ToolType ActiveToolType
@@ -66,7 +66,7 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
         }
     }
 
-	private void Update()
+    private void Update()
     {
         if (isInGame)
         {
@@ -77,67 +77,64 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
         lastClickPos = new Vector3(GameTool.GetFloat("LastPos.X"), GameTool.GetFloat("LastPos.Y"),
             GameTool.GetFloat("LastPos.Z"));
 
-        if (!GameEvent.Instance.IsShowInputField)
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (activeToolType == E_ToolType.Hand)
             {
-                if (activeToolType == E_ToolType.Hand)
+                if (hasSword)
                 {
-                    if (hasSword)
-                    {
-                        activeToolType = E_ToolType.Sword;
-                        swordObj.SetActive(true);
-                    }
-                    else if (hasAxe)
-                    {
-                        activeToolType = E_ToolType.Axe;
-                        swordObj.SetActive(false);
-                        axeObj.SetActive(true);
-                    }
+                    activeToolType = E_ToolType.Sword;
+                    swordObj.SetActive(true);
                 }
-                else if (activeToolType == E_ToolType.Sword)
-                {
-                    if (hasAxe)
-                    {
-                        activeToolType = E_ToolType.Axe;
-                        swordObj.SetActive(false);
-                        axeObj.SetActive(true);
-                    }
-                    else
-                    {
-                        activeToolType = E_ToolType.Hand;
-                        axeObj.SetActive(false);
-                        swordObj.SetActive(false);
 
-                    }
+                else if (hasAxe)
+                {
+                    activeToolType = E_ToolType.Axe;
+                    swordObj.SetActive(false);
+                    axeObj.SetActive(true);
+                }
+            }
+            else if (activeToolType == E_ToolType.Sword)
+            {
+                if (hasAxe)
+                {
+                    activeToolType = E_ToolType.Axe;
+                    swordObj.SetActive(false);
+                    axeObj.SetActive(true);
                 }
                 else
                 {
-
                     activeToolType = E_ToolType.Hand;
+                    swordObj.SetActive(false);
                     axeObj.SetActive(false);
                 }
             }
-
-            if (Input.GetKeyDown(KeyCode.F))
+            else
             {
-                if (!hasTorch)
-                {
-                    return;
-                }
-                if (!useTorch)
-                {
-                    useTorch = true;
-                    torchObj.SetActive(true);
-                }
-                else
-                {
-                    useTorch = false;
-                    torchObj.SetActive(false);
-
-                }
+                activeToolType = E_ToolType.Hand;
+                axeObj.SetActive(false);
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            if (!hasTorch)
+            {
+                return;
+            }
+            if (!useTorch)
+            {
+                useTorch = true;
+                torchObj.SetActive(true);
+            }
+            else
+            {
+                useTorch = false;
+                torchObj.SetActive(false);
+
+            }
+        }
+
     }
 
     private void OnGUI()
@@ -154,6 +151,27 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
 
             if (e.character == 80)
                 ;
+        }
+        GUIStyle style = new GUIStyle
+        {
+            fontSize = 15,
+        };
+        if (isOpenBag)
+        {
+           
+            // normal:Rendering settings for when the component is displayed normally.
+            style.normal.textColor = new Color(200 / 255f, 180 / 255f, 150 / 255f); // 需要除以255，因为范围是0-1
+            GUI.Box(new Rect(0, 50, 250, 320), "合成表&操作提示");
+            GUI.Label(new Rect(10, 100, 200, 80), "原木->木板", style);
+            GUI.Label(new Rect(10, 140, 200, 80), "木板(下) + 原木(上)->火把", style);
+            GUI.Label(new Rect(10, 180, 200, 80), "黑金(左下+左上+右上)->斧头", style);
+            GUI.Label(new Rect(10, 220, 200, 80), "黑金(下)+玻璃(上)->玻璃剑", style);
+            GUI.Label(new Rect(10, 260, 200, 80), "当背包里有火把时按F键启用/禁用", style);
+            GUI.Label(new Rect(10, 300, 200, 80), "当背包里有武器时按E键切换武器", style);
+            GUI.Label(new Rect(10, 340, 200, 80), "部分方块请使用控制台菜单获取", style);
+
+            //GUI.Label(new Rect(Screen.width - 100, Screen.height - 100, 200, 80),
+            //    "<color=#00ff00><size=30>" + "aaa" + "</size></color>", style); // 支持标记语言（什么富文本？
         }
     }
 
@@ -211,7 +229,7 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
 
             }
         }
-        if (Input.GetKeyDown(KeyCode.G) && gTime >= .2f && !GameEvent.Instance.IsShowInputField)
+        if (Input.GetKeyDown(KeyCode.G) && gTime >= .2f)
         {
             gTime = 0;
             ShowPackUI();

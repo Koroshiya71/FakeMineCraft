@@ -24,6 +24,11 @@ public class DropCube : MonoBehaviour
         {
             id = 7;
         }
+
+        if (id == 6)
+        {
+            id = 14;
+        }
         GetComponent<Renderer>().material.mainTexture
             = ResourcesManager.Instance.LoadResources<Texture>(GameDefine.texDicPath[id]);
 

@@ -20,6 +20,7 @@ public class WeatherStatusUI : BaseUI
         {
             text_WeatherStatus.text = "当前时间：" + UniStormWeatherSystem_C.Instance.hourCounter + ":" + UniStormWeatherSystem_C.Instance.minuteCounter;
             text_WeatherStatus.text += "\n\n当前天气：" + CheckWeatherName(UniStormWeatherSystem_C.Instance.weatherString);
+            text_WeatherStatus.text += "\n\n按G呼出/关闭背包，按ESC呼出菜单";
 
         });
     }

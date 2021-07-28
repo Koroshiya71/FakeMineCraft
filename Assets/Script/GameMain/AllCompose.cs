@@ -24,7 +24,7 @@ public class AllCompose : UnitySingleton<AllCompose>
     }
 
     private int[] composeId;
-
+    
     public int[] ComposeId
     {   
         get
@@ -36,7 +36,7 @@ public class AllCompose : UnitySingleton<AllCompose>
             composeId = value;
         }
     }
-
+    
     public void GetStuff(int id, List<GameObject> golist)
     {
         for (var i = 0; i < golist.Count; i++)

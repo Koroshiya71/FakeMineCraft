@@ -43,9 +43,6 @@ public class GameMainUI : BaseUI
         GameDebuger.Log(BagData.Instance.SelectCut);
         BagData.Instance.SelectCut.position = new Vector2(BagData.Instance.CutsArr[0].transform.position.x, BagData.Instance.SelectCut.position.y);
 
-        InputField cIF = GameTool.GetTheChildComponent<InputField>(gameObject, "InputField");
-        cIF.onValueChanged.AddListener(GameEvent.Instance.ChangeValue);
-        cIF.onEndEdit.AddListener(GameEvent.Instance.EndValue);
     }
 
     protected override void InitDataOnAwake()
