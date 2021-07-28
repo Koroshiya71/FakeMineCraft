@@ -7,6 +7,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using GameCore;
 
 [RequireComponent (typeof (Rigidbody))]
 [RequireComponent (typeof (CapsuleCollider))]
@@ -37,6 +38,7 @@ public class UniStormCharacterController : MonoBehaviour {
 	private Vector3 velocity;
 	private Vector3 velocityChange;
 
+    private bool isStarted = false;
 	void Awake () 
 	{
 		audioSource = GetComponent<AudioSource>();
@@ -44,6 +46,11 @@ public class UniStormCharacterController : MonoBehaviour {
 		rb.freezeRotation = true;
 		rb.useGravity = false;
 
+		//延迟玩家控制相关检测
+		EventDispatcher.AddListener(E_MessageType.EnterGameScene, delegate
+        {
+            Invoke("StartCheck",1.0f);
+        });
 		/*
 		if (staminaBar == null)
 		{
@@ -51,27 +58,18 @@ public class UniStormCharacterController : MonoBehaviour {
 		}
 		*/
 	}
-
-	void Update ()
-	{
-		if (staminaBar != null)
-		{
-			staminaBar.value = stamina;
-		}
-
-		if (stamina >= 1)
-		{
-			stamina = 1;
-		}
-
-		if (stamina <= 0)
-		{
-			stamina = 0;
-		}
-	}
-	
+	//开始检测
+    private void StartCheck()
+    {
+        isStarted = true;
+    }
 	void FixedUpdate () 
 	{
+		//如果没有开启检测则跳过检测
+        if (!isStarted )
+        {
+            return;
+        }
 		if (grounded) 
 		{
 			// Calculate how fast we should be moving while running
@@ -146,6 +144,25 @@ public class UniStormCharacterController : MonoBehaviour {
 		grounded = false;
 	}
 
+	void Update ()
+	{
+		if (staminaBar != null)
+		{
+			staminaBar.value = stamina;
+		}
+
+		if (stamina >= 1)
+		{
+			stamina = 1;
+		}
+
+		if (stamina <= 0)
+		{
+			stamina = 0;
+		}
+	}
+	
+	
 	void OnCollisionStay (Collision col) 
 	{
 		if (col.gameObject.tag == "Untagged" || !onlyJumpOnUntagged)

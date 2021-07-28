@@ -314,7 +314,7 @@ namespace Uniblocks
         }
 
 
-        //±£´æÍæ¼Òµ±Ç°µÄÎ»ÖÃ
+        //ä¿å­˜ç©å®¶å½“å‰çš„ä½ç½®
         public static void SavePlayerPos()
         {
             var playerPos = GameSceneManager.Instance.player.position;

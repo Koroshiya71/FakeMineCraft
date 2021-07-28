@@ -25,6 +25,8 @@ public class MainUI : BaseUI {
         SceneController.Instance.LoadSceneAsync("GameScene", delegate
         {
             UIManager.Instance.ShowUI(E_UiId.GameMainUI);
+            UIManager.Instance.ShowUI(E_UiId.WeatherStatusUI);
+
             UIManager.Instance.ShowUI(E_UiId.PackUI);
             UIManager.Instance.HideSingleUI(E_UiId.PackUI);
             GameSceneManager.Instance.StartGame();

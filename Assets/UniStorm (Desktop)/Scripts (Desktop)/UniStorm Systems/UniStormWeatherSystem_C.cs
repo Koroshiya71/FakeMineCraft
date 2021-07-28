@@ -4,12 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityStandardAssets.ImageEffects;
 using System;
+using GameCore;
 using UnityEngine.Events;
-
 [System.Serializable]
-public class UniStormWeatherSystem_C : MonoBehaviour {
+public class UniStormWeatherSystem_C :MonoBehaviour
+{
 
-	[System.Serializable]
+    [System.Serializable] 
 	public class UniStormEvents {
 		public int WeatherTypeNumber = 1;
 		public int TemperatureCalculationTypeNumber = 1;
@@ -19,6 +20,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 		public enum UniStormEventWeatherType{
 			None = 0, Foggy = 1, LightRainOrLightSnowWinterOnly = 2, ThunderStormOrSnowStormWinterOnly = 3, PartlyCloudy = 4, MostlyClear = 7,Sunny = 8, LightningBugsSummerOnly = 10, MostlyCloudy = 11, HeavyRainNoThunder = 12, FallingLeavesFallOnly = 13
 		}
+
 		public enum TimeCalculationType{
 			LessThan = 1, GreaterThan = 2, EqualTo = 3
 		}
@@ -54,18 +56,23 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			January = 1,February = 2,March = 3,April = 4,May = 5,June = 6,July = 7,August = 8,September = 9,October = 10,November = 11,December = 12
 		}
 	}
-	//Time Events
+
+    public static UniStormWeatherSystem_C Instance;
+
+    //Time Events
 	public int EventTabNumber = 0;
 	public int DocumentationNumber;
 	public List<UnityEvent> TimeEvent = new List<UnityEvent>();
 	public List<UniStormEvents> TotalUniStormTimeEvents = new List<UniStormEvents>();
 	public List<string> TimeEventName = new List<string>();
 	public List<bool> TimeEventFoldOut = new List<bool>();
+
 	//Weather Events
 	public List<UnityEvent> WeatherEvent = new List<UnityEvent>();
 	public List<UniStormEvents> TotalUniStormWeatherEvents = new List<UniStormEvents>();
 	public List<string> WeatherEventName = new List<string>();
 	public List<int> WeatherEventTemperature = new List<int>();
+
 	//Colors
 	public Color snowColorTwilight;
 	public Color snowColorMorning; 
@@ -158,12 +165,14 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 	Color snowColorControl;
 	public Gradient FogColorTest;
 	public Gradient StarColorGradient;
+
 	//AnimationCurves
 	public AnimationCurve moonIntensityCurve = AnimationCurve.Linear(0,0,24,5);
 	public AnimationCurve sunIntensityCurve = AnimationCurve.Linear(0,0,24,5);
 	public AnimationCurve TemperatureCurve = AnimationCurve.Linear(1,-100,13,125);
 	public AnimationCurve PrecipitationGraph = AnimationCurve.Linear(1,0,13,100);
 	public AnimationCurve TemperatureFluctuationn = AnimationCurve.Linear(0,-25,24,25);
+
 	//Ints
 	public int[] PrecipitationWeatherTypes = {1, 2, 3, 4, 12};
 	public int[] ClearWeatherTypes = {4, 7, 8, 10, 11, 13};
@@ -268,6 +277,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 	public int ProceduralLightningMillisecondsBetweenLines = 4;
 	public int ProceduralLightningStrikeRadius = 2000;
 	public int UseProceduralLightning = 1;
+
 	//Floats
 	public float RegularCloudFadeInMultiplier = 1;
 	public float RegularCloudFadeOutMultiplier = 1;
@@ -371,6 +381,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 	public float Hour;
 	public float minuteCounterCalculator = 0; 
 	public float cloudHeight = 750; 
+
 	//Bools
 	public bool menuEnabled = false;
 	public bool useInstantStartingWeather;
@@ -438,12 +449,14 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 	public bool fadeLightning;
 	public bool lightingGenerated = false;
 	bool ParticlesDisabled = false;
+
 	//Strings
 	private string stringToEdit = "0";
 	public string filePath; //Export Settings path
 	public string fileName;
 	public string weatherString;
 	public string WeatherTypeGenerated;
+
 	//GameObjects
 	public GameObject sunObject;
 	public GameObject mostlyClearClouds1; //Clouds game objects
@@ -461,6 +474,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 	public GameObject sunShaftsPositionObject;
 	public GameObject sunTrans;
 	public GameObject PlayerObject;
+
 	//Renderers
 	Renderer starSphereComponent;
 	public Renderer moonObjectComponent;
@@ -469,6 +483,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 	Renderer heavyCloudsLayerLightComponent;
 	Renderer partlyCloudyClouds1Component;
 	Renderer mostlyCloudyClouds1Component;
+
 	//Vector2s
 	Vector2 uvAnimationRateA = new Vector2( 1.0f, 0.0f );
 	Vector2 uvAnimationRateB = new Vector2( 1.0f, 0.0f );
@@ -482,15 +497,18 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 	Vector2 uvOffsetHeavyB = Vector2.zero;
 	Vector2 uvOffsetHeavyC = Vector2.zero;
 	Vector2 uvOffsetStars = Vector2.zero;
+
 	//AudioClips
 	public AudioClip customRainSound;
 	public AudioClip customRainWindSound;
 	public AudioClip customSnowWindSound;
+
 	//AudioSource Components
 	AudioSource soundComponent;
 	public AudioSource rainSoundComponent;
 	public AudioSource windSoundComponent;
 	public AudioSource windSnowSoundComponent;
+
 	//Lists
 	public List<AudioClip> ambientSoundsMorning = new List<AudioClip>();
 	public List<AudioClip> ambientSoundsDay = new List<AudioClip>();
@@ -500,6 +518,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 	public List<bool> foldOutList = new List<bool>();
 	public List<string> WeatherCodes = new List<string>();
 	public List<Material> MoonPhases = new List<Material>();
+
 	//Materials
 	public Material SkyBoxMaterial;
 	Material starSphereMaterial;
@@ -516,13 +535,16 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 	public ParticleSystem snow; 
 	public ParticleSystem snowMistFog; 
 	public ParticleSystem windyLeaves;
+
 	//Lights
 	public Light sun;
 	public Light moon;
 	public Light lightningLight;
+
 	//Image Effects
 	public SunShafts sunShaftScript;
 	public SunShafts moonShaftScript;
+
 	//Other Components
 	public Camera cameraObjectComponent;
 	public DateTime UniStormDate;
@@ -532,7 +554,9 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 	public LightningBolt LightningSystem;
 	GradientColorKey[] gck;
 	
-	void Awake (){
+	void Awake ()
+    {
+        Instance = this;
 		if (useCustomPrecipitationSounds){
 			rainSound.GetComponent<AudioSource>().clip = customRainSound;
 			rainSound.GetComponent<AudioSource>().enabled = false;
@@ -1137,8 +1161,12 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 		CalculateMonths();
 		CalculateSeaon();
 
-		//Calculates our day length so it stays consistent	
-		Hour = startTime * 24;
+        var lastHour = (int)Hour;
+        Hour = startTime * 24;
+        if (lastHour < (int)Hour)
+        {
+            PlayerData.Instance.UpdateHungryThroughTime();
+        }
 
 		//This adds support for night length
 		//If timeStopped is checked, time doesn't flow
@@ -1163,6 +1191,8 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 		if (forceStorm >= 7){
 			if (staticWeather == false){	
 				weatherForecaster = UnityEngine.Random.Range(2,3);
+                EventDispatcher.TriggerEvent(E_MessageType.ChangeWeatherAndTime);
+
 				forceStorm = 0;
 			}
 		}
@@ -1171,6 +1201,8 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 		if (changeWeather >= forceWeatherChange && stormControl == true){
 			if (staticWeather == false){	
 				weatherForecaster = UnityEngine.Random.Range(4,11);
+                EventDispatcher.TriggerEvent(E_MessageType.ChangeWeatherAndTime);
+
 				changeWeather = 0;
 			}
 		}
@@ -1241,6 +1273,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 		}
 	
 		DynamicTimeOfDaySounds ();
+		EventDispatcher.TriggerEvent(E_MessageType.ChangeWeatherAndTime);
 	}
 
 	void CalculateEvents (){
@@ -1778,6 +1811,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 		else if (weatherForecaster == 13 && !isFall){
 			weatherForecaster = ClearWeatherTypes[UnityEngine.Random.Range(0, ClearWeatherTypes.Length)];
 		}
+		EventDispatcher.TriggerEvent(E_MessageType.ChangeWeatherAndTime);
 	}
 
 	//Gives our users an in-game GUI to change the weather and time
@@ -3355,6 +3389,8 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 	/// </summary>
 	public void RandomWeather (){
 		weatherForecaster = UnityEngine.Random.Range(1, 14);
+        EventDispatcher.TriggerEvent(E_MessageType.ChangeWeatherAndTime);
+
 	}
 
 	// <summary>

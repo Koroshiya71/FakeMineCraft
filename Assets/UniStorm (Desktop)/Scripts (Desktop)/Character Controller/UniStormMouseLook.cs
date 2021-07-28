@@ -1,10 +1,13 @@
-﻿using UnityEngine;
+﻿using GameCore;
+using UnityEngine;
 
 // Very simple smooth mouselook modifier for the MainCamera in Unity
 // by Francis R. Griffiths-Keam - www.runningdimensions.com
 
 public class UniStormMouseLook : MonoBehaviour
 {
+    private bool hasShowUI = false;
+
 	Vector2 _mouseAbsolute;
 	Vector2 _smoothMouse;
 	
@@ -26,10 +29,23 @@ public class UniStormMouseLook : MonoBehaviour
 		
 		// Set target direction for the character body to its inital state.
 		if (characterBody) targetCharacterDirection = characterBody.transform.localRotation.eulerAngles;
+
+        EventDispatcher.AddListener(E_MessageType.OpenGameUI, delegate
+        {
+            hasShowUI = true;
+        });
+        EventDispatcher.AddListener(E_MessageType.CloseGameUI, delegate
+        {
+            hasShowUI = false;
+        });
 	}
 	
 	void Update()
 	{
+        if (hasShowUI)
+        {
+            return;
+        }
 		// Ensure the cursor is always locked when set
 		//Screen.lockCursor = lockCursor;
 		

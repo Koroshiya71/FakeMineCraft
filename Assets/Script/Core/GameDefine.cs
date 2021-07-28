@@ -15,12 +15,17 @@ public enum E_MessageType
     Select,
     Add,
     OpenGameUI,
-    CloseGameUI
+    CloseGameUI,
+    ChangeWeatherAndTime,
+    Compose
 }
 //工具类型
+
 public enum E_ToolType
 {
-    Hand
+    Hand,
+    Sword,
+    Axe
 }
 //方块类型
 public enum E_BlockType
@@ -31,10 +36,17 @@ public enum E_BlockType
     CobbleStone,
     MossyCobbleStone,
     StoneTiles,
-    Wood,
+    Rock,
     Door,
     TallGrass,
-    Leaves
+    Leaves,
+    BlackMetal,
+    BlueCloth,
+    Glass,
+    BlackWall,
+    Wood,
+    TransParentBlack,
+    Gold
 }
 //天空盒类型
 public enum E_SkyBoxType
@@ -83,11 +95,37 @@ public enum E_UiId
     LoadingUI,
     GameMainUI,
     PackUI,
-    InGameMenuUI
+    InGameMenuUI,
+    GameConsoleUI,
+    WeatherStatusUI
 }
 public class GameDefine
 {
-    
+    //掉落物材质路径
+    public static Dictionary<ushort, string> texDicPath = new Dictionary<ushort, string>()
+    {
+        {1,"Textures/"+"dirt" },
+        {2,"Textures/"+"Grass" },
+        {3,"Textures/"+"Cobble"},
+        {4,"Textures/"+"Mossy" },
+        {5,"Textures/"+ "StoneTiles"},
+        {6,"Textures/"+"Rock" },
+        {7,"Textures/"+"Wood" },
+        {8,"Textures/"+"TallGrass" },
+        {9,"Textures/"+"Leaves" },
+        {10,"Textures/"+"BlackMetal" },
+        {11,"Textures/"+"BlueCloth" },
+        {12,"Textures/"+"Glass" },
+        {13,"Textures/"+"BlackWall" },
+        {14,"Textures/"+"Wood" },
+        {15,"Textures/"+"TransBlack" },
+        {16,"Textures/"+"Gold" },
+        {19,"Textures/"+"Candy" },
+        {20,"Textures/"+"MilkTea" },
+
+    };
+
+
     public static Dictionary<E_UiId, string> dicPath = new Dictionary<E_UiId, string>()
     {
         { E_UiId.MainUI,"UIPrefab/"+"MainUI"},
@@ -95,6 +133,9 @@ public class GameDefine
         { E_UiId.GameMainUI,"UIPrefab/"+"GameMainUI"},
         { E_UiId.PackUI,"UIPrefab/"+"PackUI"},
         { E_UiId.InGameMenuUI,"UIPrefab/"+"InGameMenuUI"},
+        { E_UiId.GameConsoleUI,"UIPrefab/"+"GameConsoleUI"},
+        { E_UiId.WeatherStatusUI,"UIPrefab/"+"WeatherStatusUI"},
+
 
     };
 
@@ -109,12 +150,34 @@ public class GameDefine
 
     };
 
-    //不同方块耐久度字典
+    //方块耐久度字典
     public static Dictionary<E_BlockType, float> blockDurabilityDic = new Dictionary<E_BlockType, float>()
     {
-        {E_BlockType.Dirt,30},
-        {E_BlockType.Grass,20},
+        {E_BlockType.Dirt,20},
+        {E_BlockType.Grass,30},
+        {E_BlockType.CobbleStone,80},
+        {E_BlockType.MossyCobbleStone,85},
+        {E_BlockType.StoneTiles,75},
+        {E_BlockType.Rock,90},
+        {E_BlockType.Door,80},
+        {E_BlockType.TallGrass,35},
+        {E_BlockType.Leaves,10},
+        {E_BlockType.BlackMetal,160},
+        {E_BlockType.BlueCloth,40},
+        {E_BlockType.Glass,35},
+        {E_BlockType.BlackWall,100},
+        {E_BlockType.Wood,70},
+        {E_BlockType.TransParentBlack,5},
+        {E_BlockType.Gold,100}
 
+    };
+
+    //不同工具的攻击力字典
+    public static Dictionary<E_ToolType, float> toolDamageDic = new Dictionary<E_ToolType, float>()
+    {
+        {E_ToolType.Hand,10},
+        {E_ToolType.Sword,40},
+        {E_ToolType.Axe,25}
     };
     public static Type GetUIScriptType(E_UiId uiId)
     {
@@ -142,7 +205,12 @@ public class GameDefine
             case E_UiId.InGameMenuUI:
                 scriptType = typeof(InGameMenuUI);
                 break;
-
+            case E_UiId.GameConsoleUI:
+                scriptType = typeof(GameConsoleUI);
+                break;
+            case E_UiId.WeatherStatusUI:
+                scriptType = typeof(WeatherStatusUI);
+                break;
             default:
                 break;
         }

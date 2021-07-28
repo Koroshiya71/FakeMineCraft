@@ -6,7 +6,7 @@ public var motor : CharacterMotor;
 private var speedOn : boolean;
 
 function Update () {
-	if (Input.GetKeyDown ("r")) {
+	if (Input.GetKeyDown ("t")) {
 		if (speedOn) {
 			motor.movement.maxForwardSpeed = 4;
 			motor.movement.maxBackwardsSpeed = 4;

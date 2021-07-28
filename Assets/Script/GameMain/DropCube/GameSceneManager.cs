@@ -9,6 +9,30 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
     public Vector3 lastClickPos;
     private GameObject ccamera;
     private Animator cameraAnim;
+    private E_ToolType activeToolType;
+    public Vector3 currentPos;
+    private GameObject swordObj;
+    private GameObject axeObj;
+    private GameObject torchObj;
+
+    private Animator swordAnimator;
+    private Animator axeAnimator;
+
+    public bool hasTorch;
+    public bool hasSword;
+    public bool hasAxe;
+
+    private bool useTorch;
+    public E_ToolType ActiveToolType
+    {
+        get { return activeToolType; }
+    }
+
+    public float LastHurtTime
+    {
+        get;
+        set;
+    }
 
     private bool isInGame;
 
@@ -24,6 +48,16 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
 
     private bool hasShowMenu=false;
 
+    public bool IsOpenBag
+    {
+        get { return isOpenBag; }
+    }
+
+    public bool HasShowMenu
+    {
+        get { return hasShowMenu; }
+    }
+
     public Animator CameraAnim
     {
         get
@@ -36,10 +70,74 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
     {
         if (isInGame)
         {
+            currentPos = GameObject.Find("selected block graphics").transform.position;
+
             CheckUI();
         }
         lastClickPos = new Vector3(GameTool.GetFloat("LastPos.X"), GameTool.GetFloat("LastPos.Y"),
             GameTool.GetFloat("LastPos.Z"));
+
+        if (!GameEvent.Instance.IsShowInputField)
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                if (activeToolType == E_ToolType.Hand)
+                {
+                    if (hasSword)
+                    {
+                        activeToolType = E_ToolType.Sword;
+                        swordObj.SetActive(true);
+                    }
+                    else if (hasAxe)
+                    {
+                        activeToolType = E_ToolType.Axe;
+                        swordObj.SetActive(false);
+                        axeObj.SetActive(true);
+                    }
+                }
+                else if (activeToolType == E_ToolType.Sword)
+                {
+                    if (hasAxe)
+                    {
+                        activeToolType = E_ToolType.Axe;
+                        swordObj.SetActive(false);
+                        axeObj.SetActive(true);
+                    }
+                    else
+                    {
+                        activeToolType = E_ToolType.Hand;
+                        axeObj.SetActive(false);
+                        swordObj.SetActive(false);
+
+                    }
+                }
+                else
+                {
+
+                    activeToolType = E_ToolType.Hand;
+                    axeObj.SetActive(false);
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                if (!hasTorch)
+                {
+                    return;
+                }
+                if (!useTorch)
+                {
+                    useTorch = true;
+                    torchObj.SetActive(true);
+                }
+                else
+                {
+                    useTorch = false;
+                    torchObj.SetActive(false);
+
+                }
+            }
+        }
     }
 
     private void OnGUI()
@@ -61,11 +159,28 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
 
     public void StartGame()
     {
+        currentPos = GameObject.Find("selected block graphics").transform.position;
         isInGame = true;
-
-        ccamera = GameObject.Find("Main Camera");
+        PlayerData.Instance.InitHunImg();
+        //PlayerData.Instance.EditorEnt(20);
+        activeToolType = E_ToolType.Hand;
+        ccamera = GameObject.Find("Camera");
         cameraAnim = ccamera.GetComponent<Animator>();
-        player = GameObject.Find("Player").transform;   
+        player = GameObject.Find("Player").transform;
+        swordObj=GameObject.Find("Sword");
+
+        swordAnimator = swordObj.GetComponent<Animator>();
+        swordObj.SetActive(false);
+
+        axeObj = GameObject.Find("Axe");
+        axeAnimator = axeObj.GetComponent<Animator>();
+        axeObj.SetActive(false);
+
+        torchObj=GameObject.Find("Torch");
+        torchObj.SetActive(false);
+
+        EventDispatcher.TriggerEvent(E_MessageType.EnterGameScene);
+
         EventDispatcher.AddListener(E_MessageType.CloseGameUI, delegate
         {
             hasShowMenu = false;
@@ -89,12 +204,14 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
             else
             {
                 UIManager.Instance.HideSingleUI(E_UiId.InGameMenuUI);
+                UIManager.Instance.HideSingleUI(E_UiId.GameConsoleUI);
+
                 EventDispatcher.TriggerEvent(E_MessageType.CloseGameUI);
                 hasShowMenu = false;
 
             }
         }
-        if (Input.GetKeyDown(KeyCode.G) && gTime >= .2f)
+        if (Input.GetKeyDown(KeyCode.G) && gTime >= .2f && !GameEvent.Instance.IsShowInputField)
         {
             gTime = 0;
             ShowPackUI();
@@ -120,6 +237,18 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
 
     }
 
+    public void PlayAttackAnim()
+    {
+        switch (activeToolType)
+        {
+            case E_ToolType.Sword:
+                swordAnimator.Play("SwordAttack");
+                break;
+            case E_ToolType.Axe:
+                axeAnimator.Play("AxeAttack");
+                break;
+        }
+    }
     private void ShowPackUI()
     {
         if (hasShowMenu)

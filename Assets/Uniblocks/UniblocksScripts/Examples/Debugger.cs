@@ -21,19 +21,19 @@ public class Debugger : MonoBehaviour {
 			GetComponent<CharacterMotor>().enabled = true;
 		}
 	
-		if (Input.GetKeyDown("v")) {
-			Engine.SaveWorldInstant();
-		}
+		//if (Input.GetKeyDown("v")) {
+		//	Engine.SaveWorldInstant();
+		//}
 				
-		if (Input.GetKeyDown ("f")) {
-			if (Flashlight.GetComponent<Light>().enabled == true) 	Flashlight.GetComponent<Light>().enabled = false;
-			else Flashlight.GetComponent<Light>().enabled = true;
-		}
+		//if (Input.GetKeyDown ("f")) {
+		//	if (Flashlight.GetComponent<Light>().enabled == true) 	Flashlight.GetComponent<Light>().enabled = false;
+		//	else Flashlight.GetComponent<Light>().enabled = true;
+		//}
 		
-		if (Input.GetKeyDown ("t")) {
-			if (Torch.GetComponent<Light>().enabled == true) 	Torch.GetComponent<Light>().enabled = false;
-			else Torch.GetComponent<Light>().enabled = true;
-		}
+		//if (Input.GetKeyDown ("t")) {
+		//	if (Torch.GetComponent<Light>().enabled == true) 	Torch.GetComponent<Light>().enabled = false;
+		//	else Torch.GetComponent<Light>().enabled = true;
+		//}
 		
 		
 		// world save timer
@@ -48,27 +48,27 @@ public class Debugger : MonoBehaviour {
 	}
 	
 	
-	void OnGUI () {
+	//void OnGUI () {
 	
-		// GUI info box
-		if (ShowGUI) {
-			GUILayout.BeginHorizontal ();
-				GUILayout.Space (20);
-				GUILayout.BeginVertical();
-					GUILayout.Space (Screen.height - 200);
-					GUILayout.BeginVertical("Box");
-						GUILayout.Label ("1-9 - select block");
-						GUILayout.Label ("RMB - place block");
-						GUILayout.Label ("LMB - remove block");
-						GUILayout.Label ("F - toggle flashlight");
-						GUILayout.Label ("T - toggle torch");
-						GUILayout.Label ("R - toggle speed boost");
-						GUILayout.Label ("V - save world");
-					GUILayout.EndVertical();
-				GUILayout.EndVertical();
-			GUILayout.EndHorizontal();
-		}
-	}
+	//	// GUI info box
+	//	if (ShowGUI) {
+	//		GUILayout.BeginHorizontal ();
+	//			GUILayout.Space (20);
+	//			GUILayout.BeginVertical();
+	//				GUILayout.Space (Screen.height - 200);
+	//				GUILayout.BeginVertical("Box");
+	//					GUILayout.Label ("1-9 - select block");
+	//					GUILayout.Label ("RMB - place block");
+	//					GUILayout.Label ("LMB - remove block");
+	//					GUILayout.Label ("F - toggle flashlight");
+	//					GUILayout.Label ("T - toggle torch");
+	//					GUILayout.Label ("R - toggle speed boost");
+	//					GUILayout.Label ("V - save world");
+	//				GUILayout.EndVertical();
+	//			GUILayout.EndVertical();
+	//		GUILayout.EndHorizontal();
+	//	}
+	//}
 	
 
 }

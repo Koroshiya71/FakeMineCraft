@@ -7,6 +7,10 @@ public class VoxelDirt : DefaultVoxelEvents
 {
     public override void OnMouseDown(int mouseButton, VoxelInfo voxelInfo)
     {
+        if (GameSceneManager.Instance.HasShowMenu || GameSceneManager.Instance.IsOpenBag)
+        {
+            return;
+        }
         if (mouseButton == 0)
         {
             var lastPos = GameSceneManager.Instance.lastClickPos;
@@ -30,7 +34,10 @@ public class VoxelDirt : DefaultVoxelEvents
                 voxel.InitVoxelType(E_BlockType.Dirt);
                 voxel.hasInit = true;
             }
-            voxel.HitBlock(10);
+            voxel.HitBlock();
+            GameTool.SetFloat("LastPos.X", currentPos.x);
+            GameTool.SetFloat("LastPos.Y", currentPos.y);
+            GameTool.SetFloat("LastPos.Z", currentPos.z);
             if (voxel.Durability <= 0)
             {
                 Voxel.DestroyBlock(voxelInfo);
@@ -38,9 +45,7 @@ public class VoxelDirt : DefaultVoxelEvents
 
             }
 
-            GameTool.SetFloat("LastPos.X", currentPos.x);
-            GameTool.SetFloat("LastPos.Y", currentPos.y);
-            GameTool.SetFloat("LastPos.Z", currentPos.z);
+            
 
             // destroy a block with LMB
         }
@@ -51,14 +56,14 @@ public class VoxelDirt : DefaultVoxelEvents
             if (voxelInfo.GetVoxel() == 8)
             {
                 // if we're looking at a tall grass block, replace it with the held block
-                Voxel.PlaceBlock(voxelInfo, ExampleInventory.HeldBlock);
+                Voxel.PlaceBlock(voxelInfo, HoldBlockManager.HeldBlock);
             }
             else
             {
                 // else put the block next to the one we're looking at
                 VoxelInfo newInfo =
                     new VoxelInfo(voxelInfo.adjacentIndex, voxelInfo.chunk); // use adjacentIndex to place the block
-                Voxel.PlaceBlock(newInfo, ExampleInventory.HeldBlock);
+                Voxel.PlaceBlock(newInfo, HoldBlockManager.HeldBlock);
             }
         }
 

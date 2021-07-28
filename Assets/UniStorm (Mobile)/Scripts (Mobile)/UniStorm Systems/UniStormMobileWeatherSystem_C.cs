@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using UnityStandardAssets.ImageEffects;
 using UnityEngine.UI;
 using System;
+using GameCore;
 
 
 public class UniStormMobileWeatherSystem_C : MonoBehaviour {
@@ -1322,8 +1323,7 @@ public class UniStormMobileWeatherSystem_C : MonoBehaviour {
 		CalculateSeaon();
 
 		//Calculates our day length so it stays consistent	
-		Hour = startTime * 24;
-
+        
 		//This adds support for night length
 		//If timeStopped is checked, time doesn't flow
 		if (timeStopped == false)
@@ -1352,7 +1352,9 @@ public class UniStormMobileWeatherSystem_C : MonoBehaviour {
 		{
 			if (staticWeather == false)
 			{	
+				
 				weatherForecaster = UnityEngine.Random.Range(2,3);
+				EventDispatcher.TriggerEvent(E_MessageType.ChangeWeatherAndTime);
 				forceStorm = 0;
 			}
 		}
@@ -1363,8 +1365,9 @@ public class UniStormMobileWeatherSystem_C : MonoBehaviour {
 			if (staticWeather == false)
 			{	
 				weatherForecaster = UnityEngine.Random.Range(4,11);
-				changeWeather = 0;
-			}
+                EventDispatcher.TriggerEvent(E_MessageType.ChangeWeatherAndTime);
+                changeWeather = 0;
+            }
 		}
 
 		//Controls fading in and out our fog during weather transitions
@@ -3465,6 +3468,8 @@ public class UniStormMobileWeatherSystem_C : MonoBehaviour {
 			isFall = false;
 			isWinter = false;
 			WeatherForecaster ();
+            EventDispatcher.TriggerEvent(E_MessageType.ChangeWeatherAndTime);
+
 		}
 
 		//Calculates our seasons
@@ -3475,6 +3480,8 @@ public class UniStormMobileWeatherSystem_C : MonoBehaviour {
 			isFall = false;
 			isWinter = false;
 			WeatherForecaster ();
+            EventDispatcher.TriggerEvent(E_MessageType.ChangeWeatherAndTime);
+
 		}
 
 		//Calculates our seasons
@@ -3485,6 +3492,8 @@ public class UniStormMobileWeatherSystem_C : MonoBehaviour {
 			isFall = true;
 			isWinter = false; 
 			WeatherForecaster ();
+            EventDispatcher.TriggerEvent(E_MessageType.ChangeWeatherAndTime);
+
 		}
 
 		//Calculates our seasons
@@ -3495,6 +3504,8 @@ public class UniStormMobileWeatherSystem_C : MonoBehaviour {
 			isFall = false;
 			isWinter = true;
 			WeatherForecaster ();
+            EventDispatcher.TriggerEvent(E_MessageType.ChangeWeatherAndTime);
+
 		}
 	}
 

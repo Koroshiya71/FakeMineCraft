@@ -16,6 +16,7 @@ public class ExcelData
 		ExplainString (strLine, content,out DicContent );
 	}
     //解析字符串
+    
      private static void ExplainString(string strLine,  Dictionary<string, string[]> content, out Dictionary<string, Dictionary<string, string>> DicContent)
 	{
         //创建一个字典，用于存放默认值的//<字段名，默认值>

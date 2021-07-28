@@ -7,19 +7,16 @@ using GameCore;
 
 namespace Uniblocks
 {
+    
     public class ChunkLoader : MonoBehaviour
     {
+        
         private Index LastPos;
         private Index currentPos;
 
         private void Start()
         {
-            EventDispatcher.TriggerEvent(E_MessageType.EnterGameScene);
             InvokeRepeating("UpdateChunk",1.0f,0.016f);
-        }
-
-        void Awake()
-        {
         }
 
         public void Update()
@@ -63,6 +60,8 @@ namespace Uniblocks
             LastPos = currentPos;
         }
         // multiplayer
+
+
         public void OnConnectedToServer()
         {
             if (Engine.EnableMultiplayer && Engine.MultiplayerTrackPosition)

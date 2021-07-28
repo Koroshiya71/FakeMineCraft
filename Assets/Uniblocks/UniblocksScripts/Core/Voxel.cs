@@ -22,17 +22,20 @@ public class Voxel : MonoBehaviour {
         get { return blockType; }
     }
 
+	//耐久度
     private float durability;
-
     public float Durability
     {
         get { return durability; }
     }
-
-    public void HitBlock(float damage)
+	//打击方块
+    public void HitBlock()
     {
-        this.durability -= damage;
+        float damage = GameDefine.toolDamageDic[GameSceneManager.Instance.ActiveToolType];
+        durability -= damage;
+        GameSceneManager.Instance.PlayAttackAnim();
     }
+	//初始化方块类型，并根据类型初始化耐久度
     public void InitVoxelType(E_BlockType type)
     {
         hasInit = true;
@@ -54,15 +57,20 @@ public class Voxel : MonoBehaviour {
 			if (voxelObject.GetComponent<VoxelEvents>() != null) {
 				voxelObject.GetComponent<VoxelEvents>().OnBlockDestroy(voxelInfo);
 			}
-			voxelInfo.chunk.SetVoxel (voxelInfo.index, 0, true);
+            GameObject dropGo = Instantiate(ResourcesManager.Instance.LoadAsset("GamePrefab/" + "DropPrefab"),
+                GameSceneManager.Instance.currentPos, Quaternion.identity) as GameObject;
+            var dropCube = dropGo.GetComponent<DropCube>();
+            dropCube.InitMtl(voxelInfo.GetVoxel());
+            voxelInfo.chunk.SetVoxel (voxelInfo.index, 0, true);
 			Destroy (voxelObject);;
 
-            Instantiate(ResourcesManager.Instance.LoadAsset("GamePrefab/"+ "DropPrefab"),GameSceneManager.Instance.lastClickPos,Quaternion.identity);
+            
         }
-	}
-	
-	public static void PlaceBlock ( VoxelInfo voxelInfo, ushort data) {
-		
+        PlayerData.Instance.EditorEnt(PlayerData.Instance.Ent - 0.3f);
+
+}
+
+		public static void PlaceBlock ( VoxelInfo voxelInfo, ushort data) {
 		// multiplayer - send change to server
 		if (Engine.EnableMultiplayer) {
 			Engine.UniblocksNetwork.GetComponent<UniblocksClient>().SendPlaceBlock ( voxelInfo, data );
@@ -78,7 +86,15 @@ public class Voxel : MonoBehaviour {
 			}
 			Destroy (voxelObject);
 		}
-	}
+        AllCompose.Instance.Compos(BagData.Instance.Selectindex, BagData.Instance.IdList[BagData.Instance.Selectindex],
+            BagData.Instance.BagCuts[BagData.Instance.Selectindex], 1, true);
+		AllCompose.Instance.UpdateBagCutAndToolbarCut();
+        if (data!=0)
+        {
+            PlayerData.Instance.EditorEnt(PlayerData.Instance.Ent-0.1f);
+
+}
+		}
 	
 	public static void ChangeBlock ( VoxelInfo voxelInfo, ushort data ) {
 	

@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-
+using GameCore;
 // inherit from this class if you want to use the default events as well as custom ones
 
 namespace Uniblocks
@@ -8,9 +8,12 @@ namespace Uniblocks
     
     public class DefaultVoxelEvents : VoxelEvents
     {
-       
         public override void OnMouseDown(int mouseButton, VoxelInfo voxelInfo)
         {
+            if (GameSceneManager.Instance.HasShowMenu || GameSceneManager.Instance.IsOpenBag)
+            {
+                return;
+            }
             if (mouseButton == 0)
             {
                 Voxel.DestroyBlock(voxelInfo);
@@ -23,14 +26,14 @@ namespace Uniblocks
                 if (voxelInfo.GetVoxel() == 8)
                 {
                     // if we're looking at a tall grass block, replace it with the held block
-                    Voxel.PlaceBlock(voxelInfo, ExampleInventory.HeldBlock);
+                    Voxel.PlaceBlock(voxelInfo, HoldBlockManager.HeldBlock);
                 }
                 else
                 {
                     // else put the block next to the one we're looking at
                     VoxelInfo newInfo =
                         new VoxelInfo(voxelInfo.adjacentIndex, voxelInfo.chunk); // use adjacentIndex to place the block
-                    Voxel.PlaceBlock(newInfo, ExampleInventory.HeldBlock);
+                    Voxel.PlaceBlock(newInfo, HoldBlockManager.HeldBlock);
                 }
             }
         }

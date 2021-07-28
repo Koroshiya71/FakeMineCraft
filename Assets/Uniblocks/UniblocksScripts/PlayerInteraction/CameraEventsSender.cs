@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 // sends VoxelEvents such as OnLook, OnMouseDown, etc.
 
@@ -25,6 +26,7 @@ public class CameraEventsSender : MonoBehaviour {
 		if (Engine.SendCursorEvents) {
 			MouseCursorEvents();
 		}		
+		EnemyRaycast();
 	}
 	
 	private void MouseCursorEvents () { // cursor position
@@ -69,8 +71,41 @@ public class CameraEventsSender : MonoBehaviour {
 		}
 	
 	}
-	
-	private void CameraLookEvents () { // first person camera
+
+    private void EnemyRaycast()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+
+
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 2)) //发射射线(射线，射线碰撞信息，射线长度，射线会检测的层级)
+        {
+            if (hit.transform.tag == "Enemy")
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    switch (GameSceneManager.Instance.ActiveToolType)
+                    {
+                        case E_ToolType.Hand:
+                            hit.transform.GetComponent<Rabbit>().TakeDamage(GameDefine.toolDamageDic[E_ToolType.Hand]);
+							
+                            break;
+                        case E_ToolType.Axe:
+                            hit.transform.GetComponent<Rabbit>().TakeDamage(GameDefine.toolDamageDic[E_ToolType.Axe]);
+							GameSceneManager.Instance.PlayAttackAnim();
+                            break;
+                        case E_ToolType.Sword:
+                            hit.transform.GetComponent<Rabbit>().TakeDamage(GameDefine.toolDamageDic[E_ToolType.Sword]);
+                            GameSceneManager.Instance.PlayAttackAnim();
+                            break;
+
+}
+                }
+            }
+        }
+    }
+
+    private void CameraLookEvents () { // first person camera
 			
 		VoxelInfo raycast = Engine.VoxelRaycast ( Camera.main.transform.position, Camera.main.transform.forward, Range, false );
 		

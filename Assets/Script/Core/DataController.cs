@@ -16,8 +16,8 @@ public class DataController : Singleton<DataController>
     public Dictionary<string, Dictionary<string, string>> dicLevel;
     //用于存放角色配置表的字典
     public Dictionary<string, Dictionary<string, string>> dicPlayer;
-    //用于存放合成配置表的字典
-    public Dictionary<string, Dictionary<string, string>> dicCompose;
+    //用于存放物品表的字典
+    public Dictionary<string, Dictionary<string, string>> dicStuff;
     //加载所有的配置表
     public void LoadAllCfg()
     {
@@ -26,7 +26,7 @@ public class DataController : Singleton<DataController>
         //LoadNoticeCfg();
         //LoadPlayerCfg();
         //LoadActivityCfg();
-        LoadCompose();
+        LoadStuff();
     }
     //加载背包配置表
     private void LoadPackCfg()
@@ -48,9 +48,9 @@ public class DataController : Singleton<DataController>
     {
         ExcelData.LoadExcelFormCSV("PlayerCfg", out dicPlayer);
     }
-    private void LoadCompose()
+    private void LoadStuff()
     {
-        ExcelData.LoadExcelFormCSV("ComposeCfg", out dicCompose);
+        ExcelData.LoadExcelFormCSV("StuffCfg", out dicStuff);
     }
     //供外界调用的,用于读取配置表字段值得方法(字段名,ID,存放配置表内容对应的字典)
     public string ReadCfg(string keyName,int id,Dictionary<string, Dictionary<string, string>> dic)
